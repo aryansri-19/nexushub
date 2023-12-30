@@ -7,7 +7,6 @@ export async function addUser(formData: any){
     const name = formData["name"]
     const email = formData["email"]
     const password = formData["password"]
-    await prisma.$connect()
 
     try{    
         const user = await prisma.user.findUnique({
@@ -43,7 +42,6 @@ export async function addUser(formData: any){
 export async function verifyUser(formData: any){
     const email = formData["email"]
     const password = formData["password"]
-    prisma.$connect()
     try{    
         const user = await prisma.user.findUnique({
             where: {
