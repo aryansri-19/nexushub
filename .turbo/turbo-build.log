@@ -1,0 +1,34 @@
+
+> nexushub@0.1.0 build
+> next build
+
+   ▲ Next.js 14.0.4
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/7) ...
+   Generating static pages (1/7) 
+   Generating static pages (3/7) 
+   Generating static pages (5/7) 
+ ✓ Generating static pages (7/7) 
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    1.56 kB        95.1 kB
+├ ○ /_not-found                          869 B          82.8 kB
+├ ○ /icon.png                            0 B                0 B
+├ ○ /sign-in                             3.11 kB         126 kB
+└ ○ /sign-up                             3.7 kB          126 kB
++ First Load JS shared by all            81.9 kB
+  ├ chunks/938-7c0fa591687de298.js       26.7 kB
+  ├ chunks/fd9d1056-2363315954c1917d.js  53.3 kB
+  ├ chunks/main-app-ad4e12ad68697525.js  219 B
+  └ chunks/webpack-f2c090e864488310.js   1.74 kB
+
+
+○  (Static)  prerendered as static content
+

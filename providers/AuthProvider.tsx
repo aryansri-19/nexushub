@@ -1,19 +1,13 @@
-"use client"
+"use client";
 
 import { AuthContextProvider } from "@/hooks/useAuth";
 
 interface AuthProviderProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
-const AuthProvider: React.FC<AuthProviderProps> = ({ 
-    children 
-}) => {
-    return (
-        <AuthContextProvider>
-            {children}
-        </AuthContextProvider>
-    )
-}
+const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  return <AuthContextProvider>{children}</AuthContextProvider>;
+};
 
 export default AuthProvider;
