@@ -1,6 +1,6 @@
 "use server"
 
-import prisma from "@/prisma/prisma";
+import prisma from "@/lib/prisma";
 
 export const fetchEvents = async (formData: any) => {
     const {title, userId, eventDate, location, tags} = formData;
