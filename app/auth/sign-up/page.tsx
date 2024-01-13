@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSession } from "next-auth/react";
 import useAuth from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -40,7 +39,6 @@ const SignupSchema = z.object({
 const poppins = Poppins({ subsets: ["latin"], weight: "300" });
 const Signup = () => {
   const router = useRouter();
-  const { data: session } = useSession();
   const form = useForm<z.infer<typeof SignupSchema>>({
     resolver: zodResolver(SignupSchema),
     defaultValues: {
@@ -55,10 +53,10 @@ const Signup = () => {
   const auth = useAuth();
   useEffect(() => {
     console.log("Checking user");
-    if (auth.user || session) {
+    if (auth.user) {
       router.push("/");
     }
-  }, [auth.user, router, session]);
+  }, [auth.user, router]);
   function onSubmit() {
     const { email, password, confirmPassword, name } = form.getValues();
     if (!name) {
