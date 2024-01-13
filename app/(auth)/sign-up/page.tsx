@@ -27,7 +27,7 @@ import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
-import { addUser } from "@/actions/authFunctions";
+import { addUser } from "@/actions/authController/authFunctions";
 
 const SignupSchema = z.object({
   email: z.string().email(),

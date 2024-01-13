@@ -28,7 +28,7 @@ export async function addUser(formData: any){
             }
         })
 
-        const token = jwt.sign({userId: newUser.id, email: newUser.email}, process.env.JWT_SECRET as string, {expiresIn: "1d"})
+        const token = jwt.sign({userId: newUser.id, email: newUser.email}, process.env.JWT_SECRET as string)
         return {user: newUser, token: token}
     }
     catch (error) {
@@ -57,7 +57,7 @@ export async function verifyUser(formData: any){
             console.log("Password doesn't match")
             return { error: "Password doesn't match" };
         }
-        const token = jwt.sign({userId: user.id, email: user.email}, process.env.JWT_SECRET as string, {expiresIn: "1d"})
+        const token = jwt.sign({userId: user.id, email: user.email}, process.env.JWT_SECRET as string, {expiresIn: "7d"})
         return {user: user, token: token}
     }
     catch (error) {
