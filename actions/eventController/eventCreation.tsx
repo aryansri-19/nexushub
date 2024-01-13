@@ -1,5 +1,5 @@
 "use server";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { Tag } from "@prisma/client";
 
 export const createEvent = async (formData: any) => {

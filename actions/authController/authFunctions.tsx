@@ -1,7 +1,7 @@
 "use server";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 
 export async function addUser(formData: any){
     const name = formData["name"]
