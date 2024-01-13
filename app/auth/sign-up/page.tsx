@@ -72,7 +72,9 @@ const Signup = () => {
     router.push("/");
   }
   const handleLoginProvider = (provider: "google" | "github") => {
-    signIn(provider);
+    signIn(provider,
+      { callbackUrl: "http://nexushub.vercel.app/auth/sign-in" 
+    });
   }
   return (
     <>
