@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
 import useAuth from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,7 @@ const SignupSchema = z.object({
 const poppins = Poppins({ subsets: ["latin"], weight: "300" });
 const Signup = () => {
   const router = useRouter();
+  const { data: session } = useSession();
   const form = useForm<z.infer<typeof SignupSchema>>({
     resolver: zodResolver(SignupSchema),
     defaultValues: {
@@ -53,10 +55,10 @@ const Signup = () => {
   const auth = useAuth();
   useEffect(() => {
     console.log("Checking user");
-    if (auth.user) {
+    if (auth.user || session) {
       router.push("/");
     }
-  }, [auth.user, router]);
+  }, [auth.user, router, session]);
   function onSubmit() {
     const { email, password, confirmPassword, name } = form.getValues();
     if (!name) {
@@ -73,8 +75,8 @@ const Signup = () => {
   }
   const handleLoginProvider = (provider: "google" | "github") => {
     signIn(provider,
-      { callbackUrl: "http://nexushub.vercel.app/auth/sign-in" 
-    });
+      { callbackUrl: `http://nexushub.vercel.app/api/auth/callback/${provider}`}
+    );
   }
   return (
     <>
