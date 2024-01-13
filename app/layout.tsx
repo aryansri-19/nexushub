@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import AuthProvider from "@/providers/AuthProvider";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: 'Nexus Hub',

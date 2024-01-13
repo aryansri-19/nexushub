@@ -16,7 +16,7 @@ const Content = () => {
     <div className="flex justify-between items-center p-10 bg-gradient-to-r from-gray-900 via-slate-700 to-slate-400 max-w-full">
       <div className="w-1/2 pl-12 relative">
         <Image src="/images/contentPic.jpg" width={600} height={600} alt="Content Pic" className="rounded-xl"/>
-        <div className="absolute z-50 left-[8vw] top-[17vh] flex justify-between items-center gap-44 p-5">
+        <div className=" lg:absolute z-50 left-[8vw] top-[17vh] flex justify-between items-center gap-44 p-5">
           <Button className="">Find Events</Button>
           <Button className="">Create Events</Button>
         </div>

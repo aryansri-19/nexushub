@@ -54,7 +54,7 @@ const Navbar = () => {
         >
           Create
         </Link>
-        <Link href="/sign-up">
+        <Link href="/auth/sign-up">
           <PersonIcon className="w-6 h-6 text-white hover:text-gray-300 transition duration-300" />
         </Link>
       </div>
