@@ -27,7 +27,7 @@ const Navbar = () => {
         <Link href="/">
           <div className="flex justify-center items-center space-x-2">
             <Image
-              src="/logo.png"
+              src="/images/logo.png"
               alt="Nexus Hub"
               width={50}
               height={50}
