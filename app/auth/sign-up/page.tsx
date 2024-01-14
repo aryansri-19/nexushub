@@ -73,7 +73,7 @@ const Signup = () => {
   }
   const handleLoginProvider = (provider: "google" | "github") => {
     signIn(provider,
-      { callbackUrl: `http://nexushub.vercel.app/api/auth/callback/${provider}`}
+      { callbackUrl: `https://nexushub.vercel.app/api/auth/callback/${provider}`}
     );
   }
   return (

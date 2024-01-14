@@ -43,13 +43,13 @@ const Navbar = () => {
       </div>
       <div className="flex justify-evenly items-center space-x-10 pr-10 text-lg">
         <Link
-          href="/find"
+          href="/events/find"
           className={`${poppins.className} text-white hover:text-gray-300 transition duration-300`}
         >
           Find
         </Link>
         <Link
-          href="/create"
+          href="/events/create"
           className={`${poppins.className} text-white hover:text-gray-300 transition duration-300`}
         >
           Create
