@@ -1,8 +1,8 @@
 "use client";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import useAuth from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,7 @@ import Image from "next/image";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
 import { verifyUser } from "@/actions/authController/authFunctions";
+import { BackButton } from "@/components/BackButton";
 
 const SigninSchema = z.object({
   email: z.string().email(),
@@ -49,6 +50,12 @@ const Signin = () => {
     const res = verifyUser({ email, password });
     console.log(res);
   }
+  const handleLoginProvider = async (provider: "google" | "github") => {
+    const login = await signIn(provider,
+      { callbackUrl: `https://localhost:3000/api/auth/callback/${provider}`, redirect: false}
+    )
+    console.log(login)
+  }
   return (
     <>
       <Card className={`${poppins.className} p-10 w-3/4 `}>
@@ -62,6 +69,7 @@ const Signin = () => {
               <Button
                 variant="ghost"
                 className="border w-3/4 space-x-5 font-bold"
+                onClick={() => handleLoginProvider("google")}
               >
                 <Image
                   src="/images/google.png"
@@ -74,6 +82,7 @@ const Signin = () => {
               <Button
                 variant="ghost"
                 className="border w-3/4 space-x-5 font-bold"
+                onClick={() => handleLoginProvider("github")}
               >
                 <Image
                   src="/images/github.png"
@@ -94,6 +103,7 @@ const Signin = () => {
                 </Link>
               </p>
             </CardFooter>
+            <BackButton href="/" label="← Home"/>
           </Card>
           <Separator orientation="vertical" style={{ width: "5px" }} />
           <Card className="w-1/2">

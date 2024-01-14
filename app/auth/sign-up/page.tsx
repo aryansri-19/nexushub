@@ -29,6 +29,7 @@ import { Poppins } from "next/font/google";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { addUser } from "@/actions/authController/authFunctions";
+import { BackButton } from "@/components/BackButton";
 
 const SignupSchema = z.object({
   email: z.string().email(),
@@ -71,10 +72,11 @@ const Signup = () => {
     console.log("Hello", userToStore);
     router.push("/");
   }
-  const handleLoginProvider = (provider: "google" | "github") => {
-    signIn(provider,
-      { callbackUrl: `https://nexushub.vercel.app/api/auth/callback/${provider}`}
-    );
+  const handleLoginProvider = async (provider: "google" | "github") => {
+    const login = await signIn(provider,
+      { callbackUrl: `https://nexushub.app.vercel/api/auth/callback/${provider}`, redirect: false}
+    )
+    console.log(login)
   }
   return (
     <>
@@ -130,6 +132,7 @@ const Signup = () => {
                 </Link>
               </p>
             </CardFooter>
+            <BackButton href="/" label="← Home"/>
           </Card>
           <Separator orientation="vertical" style={{ width: "5px" }} />
           <Card className="w-1/2">

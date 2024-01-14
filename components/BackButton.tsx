@@ -16,7 +16,7 @@ export const BackButton = ({
   return (
     <Button
     variant="outline"
-      className="font-normal w-full"
+      className="font-normal w-1/2"
       size="sm"
       asChild
     >
