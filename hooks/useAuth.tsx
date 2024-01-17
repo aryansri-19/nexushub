@@ -8,6 +8,7 @@ type User = {
 
 type AuthContextProps = {
   user: User | null;
+  setUser: any;
 };
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -27,7 +28,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, setUser }}>{children}</AuthContext.Provider>
   );
 };
 

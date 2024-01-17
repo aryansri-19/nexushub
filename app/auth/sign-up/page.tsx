@@ -67,14 +67,20 @@ const Signup = () => {
       setAlert({ message: "Password doesn't match", isAlert: true });
       return;
     } else setAlert({ message: "", isAlert: false });
-    const userToStore = addUser({ name, email, password });
-    localStorage.setItem("user", JSON.stringify(userToStore));
-    console.log("Hello", userToStore);
-    router.push("/");
+    const userToStore = addUser({ name, email, password })
+    .then((res) => {
+      if(res.error){
+        console.log(res.error)
+      }
+      else{
+        localStorage.setItem("user", JSON.stringify(userToStore));
+        console.log("Hello", userToStore);
+        router.push("/");
+      }})
   }
   const handleLoginProvider = async (provider: "google" | "github") => {
     const login = await signIn(provider,
-      { callbackUrl: `https://nexushub.app.vercel/api/auth/callback/${provider}`, redirect: false}
+      { callbackUrl: `https://nexushub.vercel.app/api/auth/callback/${provider}`, redirect: false}
     )
     console.log(login)
   }
@@ -186,6 +192,7 @@ const Signup = () => {
                         <FormLabel>Password</FormLabel>
                         <FormControl>
                           <Input
+                            type="password"
                             placeholder="Must be more than 8 characters"
                             {...field}
                             autoComplete="off"
@@ -202,6 +209,7 @@ const Signup = () => {
                         <FormLabel>Confirm your password</FormLabel>
                         <FormControl>
                           <Input
+                            type="password"
                             placeholder="Password Again"
                             {...field}
                             autoComplete="off"

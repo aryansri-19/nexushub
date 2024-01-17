@@ -1,7 +1,8 @@
 "use client";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import useAuth from "@/hooks/useAuth";
@@ -35,7 +36,7 @@ const SigninSchema = z.object({
 });
 const poppins = Poppins({ subsets: ["latin"], weight: "300" });
 const Signin = () => {
-  // const router = useRouter();
+  const router = useRouter();
   const auth = useAuth();
   const form = useForm<z.infer<typeof SigninSchema>>({
     resolver: zodResolver(SigninSchema),
@@ -45,10 +46,23 @@ const Signin = () => {
     },
     progressive: true,
   });
-  function onSubmit() {
+  useEffect(() => {
+    console.log("Checking user");
+    if (auth.user) {
+      router.push("/")
+    }
+  }, [auth.user, router]);
+  async function onSubmit() {
     const { email, password } = form.getValues();
-    const res = verifyUser({ email, password });
-    console.log(res);
+    const user = await verifyUser({ email, password })
+    if (user.error) {
+      console.log(user.error)
+    } else {
+      localStorage.setItem("user", JSON.stringify(user))
+      auth.setUser(()=>[user.user?.id, user.user?.name, user.user?.email])
+      router.push("/");
+      console.log(user)
+    }
   }
   const handleLoginProvider = async (provider: "google" | "github") => {
     const login = await signIn(provider,
@@ -141,6 +155,7 @@ const Signin = () => {
                         <FormLabel>Password</FormLabel>
                         <FormControl>
                           <Input
+                            type="password"
                             placeholder="Secret Code"
                             {...field}
                             autoComplete="off"
