@@ -10,7 +10,7 @@ const CreateEventPage = () => {
         if (!auth.user) {
             router.push("/auth/sign-in")
         }
-    }, [auth.user])
+    }, [auth.user, router])
     return ( 
         <div>
             <p>Hello</p>
