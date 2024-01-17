@@ -1,8 +1,8 @@
   "use client";
   import { Poppins } from "next/font/google";
-  import Topic from "./ui/topic";
+  import Topic from "../ui/topic";
   import Image from "next/image";
-  import { Button } from "./ui/button";
+  import { Button } from "../ui/button";
   import { useRouter } from "next/navigation";
   import { tags } from "@/lib/utils";
 import { useEffect, useState } from "react";
