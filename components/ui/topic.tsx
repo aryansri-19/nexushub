@@ -17,7 +17,7 @@ const Topic: React.FC<TopicProps> = ({ title, imgUrl, className }) => {
         className
       }
     >
-      <Link href={`/themes/${title.toLowerCase()}`} className="flex flex-col items-center justify-center space-y-4">
+      <Link href={`/themes/${title.toLowerCase()}`} className="flex flex-col items-center justify-center space-y-4 hover:opacity-70">
         <Image
           src={imgUrl}
           alt={title}

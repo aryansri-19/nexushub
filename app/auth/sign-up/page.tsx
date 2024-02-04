@@ -80,7 +80,7 @@ const Signup = () => {
   }
   const handleLoginProvider = async (provider: "google" | "github") => {
     const login = await signIn(provider,
-      { callbackUrl: `https://nexushub.vercel.app/api/auth/callback/${provider}`, redirect: false}
+      { callbackUrl: process.env.REDIRECT_URL+provider, redirect: false}
     )
     console.log(login)
   }

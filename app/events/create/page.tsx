@@ -6,14 +6,14 @@ import { useRouter } from 'next/navigation';
 const CreateEventPage = () => {
     const auth = useAuth()
     const router = useRouter()
-    useEffect(() => {
-        if (!auth.user) {
-            router.push("/auth/sign-in")
-        }
-    }, [auth.user, router])
+    // useEffect(() => {
+    //     if (!auth.user) {
+    //         router.push("/auth/sign-in")
+    //     }
+    // }, [auth.user, router])
     return ( 
         <div>
-            <p>Hello</p>
+            
         </div>
      );
 }

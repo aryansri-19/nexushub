@@ -66,7 +66,7 @@ const Signin = () => {
   }
   const handleLoginProvider = async (provider: "google" | "github") => {
     const login = await signIn(provider,
-      { callbackUrl: `https://localhost:3000/api/auth/callback/${provider}`, redirect: false}
+      { callbackUrl: process.env.REDIRECT_URL+provider, redirect: false}
     )
     console.log(login)
   }
