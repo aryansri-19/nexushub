@@ -57,7 +57,7 @@ export async function verifyUser(formData: any){
             console.log("Password doesn't match")
             return { error: "Password doesn't match" };
         }
-        const token = jwt.sign({userId: user.id, email: user.email}, process.env.JWT_SECRET as string, {expiresIn: "7d"})
+        const token = jwt.sign({userId: user.id, email: user.email}, process.env.JWT_SECRET as string, {expiresIn: "1h"})
         return {user: user, token: token}
     }
     catch (error) {

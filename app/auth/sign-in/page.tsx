@@ -65,10 +65,13 @@ const Signin = () => {
     }
   }
   const handleLoginProvider = async (provider: "google" | "github") => {
-    const login = await signIn(provider,
-      { callbackUrl: process.env.REDIRECT_URL+provider, redirect: false}
-    )
-    console.log(login)
+    try {
+      await signIn(provider, {
+        callbackUrl: "/"
+      });
+    } catch (error) {
+      console.error("Error occurred during login:", error);
+    }
   }
   return (
     <>

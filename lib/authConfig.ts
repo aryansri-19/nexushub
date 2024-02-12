@@ -6,11 +6,11 @@ export const authOptions: NextAuthOptions = {
     providers: [
         GithubProvider({
             clientId: process.env.GITHUB_PROVIDER_CLIENTID as string,
-            clientSecret: process.env.GITHUB_PROVIDER_CLIENT_SCERET as string
+            clientSecret: process.env.GITHUB_PROVIDER_CLIENT_SECRET as string
         }),
         GoogleProvider({
             clientId: process.env.GOOGLE_PROVIDER_CLIENTID as string,
-            clientSecret: process.env.GOOGLE_PROVIDER_CLIENT_SCERET as string,
+            clientSecret: process.env.GOOGLE_PROVIDER_CLIENT_SECRET as string,
             authorization: {
                 params: {
                   prompt: "consent",
@@ -22,5 +22,3 @@ export const authOptions: NextAuthOptions = {
     ],
     secret: process.env.NEXTAUTH_SECRET as string,
 }
-
-

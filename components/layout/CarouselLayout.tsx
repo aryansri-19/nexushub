@@ -14,7 +14,7 @@ const CarouselLayout = () => {
             <Carousel className="max-w-screen" opts={{align: "start", loop: true}}>
                 <CarouselContent>
                     {examples.map((example, index) => (
-                    <CarouselItem key={index} className="lg:basis-1/5">
+                    <CarouselItem key={index} className="lg:basis-1/5 basis-1/3">
                         <CarouselCard image_url={example.imgUrl} title={example.title}/>
                     </CarouselItem>
                     ))}

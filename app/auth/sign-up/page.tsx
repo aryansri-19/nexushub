@@ -79,10 +79,9 @@ const Signup = () => {
       }})
   }
   const handleLoginProvider = async (provider: "google" | "github") => {
-    const login = await signIn(provider,
-      { callbackUrl: process.env.REDIRECT_URL+provider, redirect: false}
+    await signIn(provider,
+      { callbackUrl: "/" }
     )
-    console.log(login)
   }
   return (
     <>
