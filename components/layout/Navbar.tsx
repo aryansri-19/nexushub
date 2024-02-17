@@ -6,7 +6,6 @@ import { Poppins } from "next/font/google";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
-import { auth } from "@/app/api/auth/[...nextauth]/route";
 
 const lobster = Lobster({ weight: "400", subsets: ["vietnamese"] });
 const poppins = Poppins({ weight: "400", subsets: ["latin"] });
