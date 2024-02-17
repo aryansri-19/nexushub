@@ -13,7 +13,7 @@ const CreateEventPage = () => {
     // }, [auth.user, router])
     return ( 
         <div>
-            
+                
         </div>
      );
 }

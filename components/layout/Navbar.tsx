@@ -6,31 +6,22 @@ import { Poppins } from "next/font/google";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
+import { auth } from "@/app/api/auth/[...nextauth]/route";
 
 const lobster = Lobster({ weight: "400", subsets: ["vietnamese"] });
 const poppins = Poppins({ weight: "400", subsets: ["latin"] });
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const auth = useAuth();
+  const customAuth = useAuth();
+  // const session = auth();
   useEffect(() => {
-    if (auth.user) {
+    if (customAuth.user) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-  }, [auth.user]);
-  useEffect(()=>{
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY
-      setIsScrolled(scrollPosition > 0)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
+  }, [customAuth.user]);
   return (
     <nav className='w-full flex justify-between items-center p-3 bg-gradient-to-r from-gray-900 via-slate-700 to-slate-400 sticky top-0 z-10'>
       <div className="pl-10">
