@@ -29,7 +29,7 @@ import { Poppins } from "next/font/google";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { addUser } from "@/actions/authController/authFunctions";
-import { BackButton } from "@/components/BackButton";
+import { BackButton } from "@/components/authErrorPage/BackButton";
 
 const SignupSchema = z.object({
   email: z.string().email(),
