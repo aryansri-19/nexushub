@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { tags } from "@/lib/constants/tags";
 import { useEffect, useState } from "react";
-import CarouselLayout from "./CarouselLayout";
+import CarouselLayout from "./Carousel/CarouselLayout";
 
 const poppins = Poppins({ weight: "700", subsets: ["latin"] });
 const Content = () => {

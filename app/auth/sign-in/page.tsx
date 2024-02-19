@@ -28,7 +28,7 @@ import Image from "next/image";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
 import { verifyUser } from "@/actions/authController/authFunctions";
-import { BackButton } from "@/components/BackButton";
+import { BackButton } from "@/components/authErrorPage/BackButton";
 
 const SigninSchema = z.object({
   email: z.string().email(),

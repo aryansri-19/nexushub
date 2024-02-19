@@ -3,7 +3,7 @@ import { Carousel,
     CarouselItem,
     CarouselNext,
     CarouselPrevious 
-} from "../ui/carousel";
+} from "../../ui/carousel";
 import CarouselCard from "./CarouselCard";
 import { examples } from "@/lib/constants/examples";
 

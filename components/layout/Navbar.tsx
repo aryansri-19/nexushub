@@ -1,26 +1,18 @@
-"use client";
+'use client';
 import Link from "next/link";
 import Image from "next/image";
 import { Lobster } from "next/font/google";
 import { Poppins } from "next/font/google";
-import { PersonIcon } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
+import { useSession } from "next-auth/react";
+import Profile from "./Profile";
 
 const lobster = Lobster({ weight: "400", subsets: ["vietnamese"] });
 const poppins = Poppins({ weight: "400", subsets: ["latin"] });
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const customAuth = useAuth();
-  // const session = auth();
-  useEffect(() => {
-    if (customAuth.user) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, [customAuth.user]);
+  const { data: session } = useSession();
   return (
     <nav className='w-full flex justify-between items-center p-3 bg-gradient-to-r from-gray-900 via-slate-700 to-slate-400 sticky top-0 z-10'>
       <div className="pl-10">
@@ -55,8 +47,8 @@ const Navbar = () => {
           Create
         </Link>
         <Link href="/auth/sign-in">
-          {isLoggedIn ? 
-          <PersonIcon className="w-6 h-6 text-white hover:text-gray-300 transition duration-300" />
+          { customAuth.user || session ?
+          <Profile/>
           : <p className={`${poppins.className} text-white hover:text-gray-300 transition duration-300`}>Sign In</p>}
         </Link>
       </div>

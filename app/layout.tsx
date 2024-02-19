@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import AuthProvider from "@/providers/AuthProvider";
-import { SessionProvider } from "next-auth/react";
+import { NextProvider } from '@/providers/NextProvider';
 
 export const metadata: Metadata = {
   title: 'Nexus Hub',
@@ -16,9 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <NextProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </NextProvider>
       </body>
     </html>
   )
