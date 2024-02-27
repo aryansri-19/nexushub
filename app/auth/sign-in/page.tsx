@@ -23,6 +23,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Poppins } from "next/font/google";
@@ -46,17 +47,12 @@ const Signin = () => {
     },
     progressive: true,
   });
-  useEffect(() => {
-    console.log("Checking user");
-    if (auth.user) {
-      router.push("/")
-    }
-  }, [auth.user, router]);
+  const [alert, setAlert] = useState({ message: "", isAlert: false });
   async function onSubmit() {
     const { email, password } = form.getValues();
     const user = await verifyUser({ email, password })
     if (user.error) {
-      console.log(user.error)
+      setAlert({ message: user.error, isAlert: true });
     } else {
       localStorage.setItem("user", JSON.stringify(user))
       auth.setUser(()=>[user.user?.id, user.user?.name, user.user?.email])
@@ -75,6 +71,15 @@ const Signin = () => {
   }
   return (
     <>
+    {alert.isAlert && (
+        <Alert
+          variant="destructive"
+          className="fixed bottom-0 bg-white right-0 w-1/5 transition duration-500 ease-in-out transform -translate-x-10 "
+        >
+          <AlertTitle>Invalid input</AlertTitle>
+          <AlertDescription>{alert.message}</AlertDescription>
+        </Alert>
+      )}
       <Card className={`${poppins.className} p-10 w-3/4 `}>
         <CardContent className="flex justify-center">
           <Card className="w-1/2 text-center">

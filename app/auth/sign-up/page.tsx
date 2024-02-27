@@ -70,7 +70,7 @@ const Signup = () => {
     const userToStore = addUser({ name, email, password })
     .then((res) => {
       if(res.error){
-        console.log(res.error)
+        setAlert({ message: res.error, isAlert: true });
       }
       else{
         localStorage.setItem("user", JSON.stringify(userToStore));

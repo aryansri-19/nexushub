@@ -48,7 +48,7 @@ const Navbar = () => {
         </Link>
         <Link href="/auth/sign-in">
           { customAuth.user || session ?
-          <Profile/>
+          <Profile session={session}/>
           : <p className={`${poppins.className} text-white hover:text-gray-300 transition duration-300`}>Sign In</p>}
         </Link>
       </div>
