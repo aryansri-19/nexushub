@@ -31,7 +31,7 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    runtime: 'edge',
+    runtime: 'experimental-edge',
     unstable_allowDynamic: [
         '/node-modules/next-auth/react/index.js'
     ],
