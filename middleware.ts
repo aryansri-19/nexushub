@@ -11,29 +11,27 @@ export default async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const requestForNextAuth = {
-        headers: {
-            cookie: request.headers.get('cookie') ?? undefined
-        }
-    }
+//     const requestForNextAuth = {
+//         headers: {
+//             cookie: request.headers.get('cookie') ?? undefined
+//         }
+//     }
 
-    const session = await getSession({ req: requestForNextAuth });
-    if(session) {
-        return NextResponse.next();
-    }
+//     const session = await getSession({ req: requestForNextAuth });
+//     if(session) {
+//         return NextResponse.next();
+//     }
 
-    // const isCustomAuth = useAuth();
-    // if(isCustomAuth.user) {
-    //     return NextResponse.next();
-    // }
+// const isCustomAuth = useAuth();
+// if(isCustomAuth.user) {
+//     return NextResponse.next();
+// }
 
-    return NextResponse.redirect(url.origin+"/auth/sign-in");
+//     return NextResponse.redirect(url.origin+"/auth/sign-in");
+return NextResponse.next();
 }
 
+
 export const config = {
-    runtime: 'experimental-edge',
-    unstable_allowDynamic: [
-        '/node-modules/next-auth/react/index.js'
-    ],
     matcher: ['/((?!api|_next/static|_next/image|images|favicon.ico).*)']
-  }
+}

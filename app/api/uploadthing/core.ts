@@ -6,7 +6,7 @@ import useAuth from "@/hooks/useAuth";
  
 const f = createUploadthing();
 
-const handleAuth = () => {
+const HandleAuth = () => {
     const customAuth = useAuth();
     const { data: session } = useSession();
     if (!customAuth.user && !session) throw new UploadThingError("Unauthorized");
@@ -15,10 +15,10 @@ const handleAuth = () => {
  
 export const ourFileRouter = {
   serverImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 }})
-    .middleware(() => handleAuth())
+    .middleware(() => HandleAuth())
     .onUploadComplete(() => {}),
   messageFile: f(["image"])
-    .middleware(() => handleAuth())
+    .middleware(() => HandleAuth())
     .onUploadComplete(() => {})  
 } satisfies FileRouter;
  
