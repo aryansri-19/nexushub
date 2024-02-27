@@ -31,5 +31,9 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
+    runtime: 'edge',
+    unstable_allowDynamic: [
+        '/node-modules/next-auth/react/index.js'
+    ],
     matcher: ['/((?!api|_next/static|_next/image|images|favicon.ico).*)']
   }
