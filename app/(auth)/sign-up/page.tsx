@@ -30,7 +30,7 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { addUser } from "@/actions/authController/authFunctions";
 import { BackButton } from "@/components/authErrorPage/BackButton";
-import handleAuth from "@/lib/handleAuth";
+import HandleAuth from "@/lib/handleAuth";
 
 const SignupSchema = z.object({
   email: z.string().email(),
@@ -53,12 +53,12 @@ const Signup = () => {
     progressive: true,
   });
   const [alert, setAlert] = useState({ message: "", isAlert: false });
-  const res = handleAuth();
+  const res = HandleAuth();
   useEffect(() => {
     if (res.success) {
       router.push("/");
     }
-  }, [res]);
+  }, [res, router]);
   async function onSubmit() {
     const { email, password, confirmPassword, name } = form.getValues();
     if (!name) {

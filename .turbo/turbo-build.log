@@ -9,26 +9,35 @@
  ✓ Compiled successfully
    Linting and checking validity of types ...
    Collecting page data ...
-   Generating static pages (0/7) ...
-   Generating static pages (1/7) 
-   Generating static pages (3/7) 
-   Generating static pages (5/7) 
- ✓ Generating static pages (7/7) 
+   Generating static pages (0/13) ...
+   Generating static pages (3/13) 
+   Generating static pages (6/13) 
+   Generating static pages (9/13) 
+ ✓ Generating static pages (13/13) 
    Finalizing page optimization ...
    Collecting build traces ...
 
 Route (app)                              Size     First Load JS
-┌ ○ /                                    1.56 kB        95.1 kB
-├ ○ /_not-found                          869 B          82.8 kB
+┌ ○ /                                    12 kB           148 kB
+├ ○ /_not-found                          869 B          82.9 kB
+├ λ /api/auth/[...nextauth]              0 B                0 B
+├ ○ /api/auth/error                      1.82 kB        98.2 kB
+├ λ /api/uploadthing                     0 B                0 B
+├ ○ /events/create                       563 B          82.6 kB
+├ ○ /events/find                         150 B          82.2 kB
 ├ ○ /icon.png                            0 B                0 B
-├ ○ /sign-in                             3.11 kB         126 kB
-└ ○ /sign-up                             3.7 kB          126 kB
-+ First Load JS shared by all            81.9 kB
-  ├ chunks/938-7c0fa591687de298.js       26.7 kB
-  ├ chunks/fd9d1056-2363315954c1917d.js  53.3 kB
+├ ○ /profile                             150 B          82.2 kB
+├ ○ /sign-in                             3.94 kB         138 kB
+├ ○ /sign-out                            1.23 kB         101 kB
+├ ○ /sign-up                             4.01 kB         138 kB
+└ λ /themes/[theme]                      150 B          82.2 kB
++ First Load JS shared by all            82 kB
+  ├ chunks/938-c33b6a4649d9de6a.js       26.7 kB
+  ├ chunks/fd9d1056-c426fd48dcbd8614.js  53.3 kB
   ├ chunks/main-app-ad4e12ad68697525.js  219 B
-  └ chunks/webpack-f2c090e864488310.js   1.74 kB
+  └ chunks/webpack-ddc33f54d6ee7742.js   1.84 kB
 
 
-○  (Static)  prerendered as static content
+○  (Static)   prerendered as static content
+λ  (Dynamic)  server-rendered on demand using Node.js
 

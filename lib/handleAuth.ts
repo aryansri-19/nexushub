@@ -2,7 +2,7 @@
 import useAuth from "@/hooks/useAuth";
 import { useSession } from "next-auth/react";
 
-export default function handleAuth() {
+export default function HandleAuth() {
     const customAuth = useAuth();
     const { data: session } = useSession();
   

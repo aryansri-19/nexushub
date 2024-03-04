@@ -30,7 +30,7 @@ import { Poppins } from "next/font/google";
 import Link from "next/link";
 import { verifyUser } from "@/actions/authController/authFunctions";
 import { BackButton } from "@/components/authErrorPage/BackButton";
-import handleAuth from "@/lib/handleAuth";
+import HandleAuth from "@/lib/handleAuth";
 
 const SigninSchema = z.object({
   email: z.string().email(),
@@ -49,12 +49,12 @@ const Signin = () => {
     progressive: true,
   });
   
-  const res = handleAuth();
+  const res = HandleAuth();
   useEffect(() => {
     if (res.success) {
       router.push("/");
     }
-  }, [res])
+  }, [res, router])
 
   const [alert, setAlert] = useState({ message: "", isAlert: false });
   async function onSubmit() {

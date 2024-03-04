@@ -9,14 +9,14 @@ import {
 } from "../ui/dropdown-menu";
 import { PersonIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
-import handleAuth from "@/lib/handleAuth";
+import HandleAuth from "@/lib/handleAuth";
 
 interface ProfileProps {
   poppins: any
 }
 
 const Profile = (props: ProfileProps) => {
-  const res = handleAuth();
+  const res = HandleAuth();
   const { success, sessionAuth } = res;
   return (
     <>
