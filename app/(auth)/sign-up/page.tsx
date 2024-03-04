@@ -1,9 +1,8 @@
 "use client";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
@@ -28,50 +27,65 @@ import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
-import { verifyUser } from "@/actions/authController/authFunctions";
+import { signIn } from "next-auth/react";
+import { addUser } from "@/actions/authController/authFunctions";
 import { BackButton } from "@/components/authErrorPage/BackButton";
+import handleAuth from "@/lib/handleAuth";
 
-const SigninSchema = z.object({
+const SignupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
+  confirmPassword: z.string().min(8),
+  name: z.string(),
 });
 const poppins = Poppins({ subsets: ["latin"], weight: "300" });
-const Signin = () => {
+const Signup = () => {
   const router = useRouter();
   const auth = useAuth();
-  const form = useForm<z.infer<typeof SigninSchema>>({
-    resolver: zodResolver(SigninSchema),
+  const form = useForm<z.infer<typeof SignupSchema>>({
+    resolver: zodResolver(SignupSchema),
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: "",
+      name: "",
     },
     progressive: true,
   });
   const [alert, setAlert] = useState({ message: "", isAlert: false });
-  async function onSubmit() {
-    const { email, password } = form.getValues();
-    const user = await verifyUser({ email, password })
-    if (user.error) {
-      setAlert({ message: user.error, isAlert: true });
-    } else {
-      localStorage.setItem("user", JSON.stringify(user))
-      auth.setUser(()=>[user.user?.id, user.user?.name, user.user?.email])
+  const res = handleAuth();
+  useEffect(() => {
+    if (res.success) {
       router.push("/");
-      console.log(user)
+    }
+  }, [res]);
+  async function onSubmit() {
+    const { email, password, confirmPassword, name } = form.getValues();
+    if (!name) {
+      setAlert({ message: "Please fill your username", isAlert: true });
+      return;
+    } else if (confirmPassword !== password) {
+      setAlert({ message: "Password doesn't match", isAlert: true });
+      return;
+    } else setAlert({ message: "", isAlert: false });
+    const userToStore = await addUser({ name, email, password })
+    if(userToStore.error){
+      setAlert({ message: userToStore.error, isAlert: true });
+    }
+    else{
+      localStorage.setItem("user", JSON.stringify(userToStore));
+      auth.setUser(()=>[userToStore.user?.id, userToStore.user?.name, userToStore.user?.email])
+      router.push("/");
     }
   }
   const handleLoginProvider = async (provider: "google" | "github") => {
-    try {
-      await signIn(provider, {
-        callbackUrl: "/"
-      });
-    } catch (error) {
-      console.error("Error occurred during login:", error);
-    }
+    await signIn(provider,
+      { callbackUrl: "/" }
+    )
   }
   return (
     <>
-    {alert.isAlert && (
+      {alert.isAlert && (
         <Alert
           variant="destructive"
           className="fixed bottom-0 bg-white right-0 w-1/5 transition duration-500 ease-in-out transform -translate-x-10 "
@@ -84,8 +98,8 @@ const Signin = () => {
         <CardContent className="flex justify-center">
           <Card className="w-1/2 text-center">
             <CardHeader>
-              <CardTitle>Sign in with providers</CardTitle>
-              <CardDescription>Sign in using Google or Github</CardDescription>
+              <CardTitle>Sign up with providers</CardTitle>
+              <CardDescription>Sign up using Google or Github</CardDescription>
             </CardHeader>
             <CardContent className="space-y-10 p-10 flex flex-col justify-center items-center group">
               <Button
@@ -117,11 +131,9 @@ const Signin = () => {
             </CardContent>
             <CardFooter className="p-10 flex justify-center">
               <p>
-                Dont have an account?{" "}
-                <Link href="/auth/sign-up">
-                  <span className="text-blue-500 hover:underline">
-                    Create one
-                  </span>
+                Already have an account?{" "}
+                <Link href="/sign-in">
+                  <span className="text-blue-500 hover:underline">Sign in</span>
                 </Link>
               </p>
             </CardFooter>
@@ -130,8 +142,8 @@ const Signin = () => {
           <Separator orientation="vertical" style={{ width: "5px" }} />
           <Card className="w-1/2">
             <CardHeader className="text-center">
-              <CardTitle>Welcome Back</CardTitle>
-              <CardDescription>Sign in using email</CardDescription>
+              <CardTitle>Create Account</CardTitle>
+              <CardDescription>Sign up using email</CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -139,6 +151,22 @@ const Signin = () => {
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-4"
                 >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter your username"
+                            {...field}
+                            autoComplete="off"
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="email"
@@ -164,7 +192,7 @@ const Signin = () => {
                         <FormControl>
                           <Input
                             type="password"
-                            placeholder="Secret Code"
+                            placeholder="Must be more than 8 characters"
                             {...field}
                             autoComplete="off"
                           />
@@ -172,8 +200,24 @@ const Signin = () => {
                       </FormItem>
                     )}
                   />
-                  <Separator style={{ height: "5vh", visibility: "hidden" }} />
-                  <Button className=" w-full bg-gradient-to-r from-green-500 via-blue-500 to-pink-500 hover:opacity-75">
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm your password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Password Again"
+                            {...field}
+                            autoComplete="off"
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <Button className="w-full bg-gradient-to-r from-pink-500 via-blue-500 to-green-500 hover:opacity-75">
                     Submit
                   </Button>
                 </form>
@@ -186,4 +230,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Signup;

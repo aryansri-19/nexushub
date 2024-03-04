@@ -1,8 +1,9 @@
 "use client";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import useAuth from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
@@ -27,65 +28,59 @@ import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
-import { addUser } from "@/actions/authController/authFunctions";
+import { verifyUser } from "@/actions/authController/authFunctions";
 import { BackButton } from "@/components/authErrorPage/BackButton";
+import handleAuth from "@/lib/handleAuth";
 
-const SignupSchema = z.object({
+const SigninSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
-  confirmPassword: z.string().min(8),
-  name: z.string(),
 });
 const poppins = Poppins({ subsets: ["latin"], weight: "300" });
-const Signup = () => {
+const Signin = () => {
   const router = useRouter();
-  const form = useForm<z.infer<typeof SignupSchema>>({
-    resolver: zodResolver(SignupSchema),
+  const auth = useAuth();
+  const form = useForm<z.infer<typeof SigninSchema>>({
+    resolver: zodResolver(SigninSchema),
     defaultValues: {
       email: "",
       password: "",
-      confirmPassword: "",
-      name: "",
     },
     progressive: true,
   });
-  const [alert, setAlert] = useState({ message: "", isAlert: false });
-  const auth = useAuth();
+  
+  const res = handleAuth();
   useEffect(() => {
-    console.log("Checking user");
-    if (auth.user) {
+    if (res.success) {
       router.push("/");
     }
-  }, [auth.user, router]);
-  function onSubmit() {
-    const { email, password, confirmPassword, name } = form.getValues();
-    if (!name) {
-      setAlert({ message: "Please fill your username", isAlert: true });
-      return;
-    } else if (confirmPassword !== password) {
-      setAlert({ message: "Password doesn't match", isAlert: true });
-      return;
-    } else setAlert({ message: "", isAlert: false });
-    const userToStore = addUser({ name, email, password })
-    .then((res) => {
-      if(res.error){
-        setAlert({ message: res.error, isAlert: true });
-      }
-      else{
-        localStorage.setItem("user", JSON.stringify(userToStore));
-        console.log("Hello", userToStore);
-        router.push("/");
-      }})
+  }, [res])
+
+  const [alert, setAlert] = useState({ message: "", isAlert: false });
+  async function onSubmit() {
+    const { email, password } = form.getValues();
+    const user = await verifyUser({ email, password })
+    if (user.error) {
+      setAlert({ message: user.error, isAlert: true });
+    } else {
+      localStorage.setItem("user", JSON.stringify(user))
+      auth.setUser(()=>[user.user?.id, user.user?.name, user.user?.email])
+      router.push("/");
+      console.log(user)
+    }
   }
   const handleLoginProvider = async (provider: "google" | "github") => {
-    await signIn(provider,
-      { callbackUrl: "/" }
-    )
+    try {
+      await signIn(provider, {
+        callbackUrl: "/"
+      });
+    } catch (error) {
+      console.error("Error occurred during login:", error);
+    }
   }
   return (
     <>
-      {alert.isAlert && (
+    {alert.isAlert && (
         <Alert
           variant="destructive"
           className="fixed bottom-0 bg-white right-0 w-1/5 transition duration-500 ease-in-out transform -translate-x-10 "
@@ -98,8 +93,8 @@ const Signup = () => {
         <CardContent className="flex justify-center">
           <Card className="w-1/2 text-center">
             <CardHeader>
-              <CardTitle>Sign up with providers</CardTitle>
-              <CardDescription>Sign up using Google or Github</CardDescription>
+              <CardTitle>Sign in with providers</CardTitle>
+              <CardDescription>Sign in using Google or Github</CardDescription>
             </CardHeader>
             <CardContent className="space-y-10 p-10 flex flex-col justify-center items-center group">
               <Button
@@ -131,9 +126,11 @@ const Signup = () => {
             </CardContent>
             <CardFooter className="p-10 flex justify-center">
               <p>
-                Already have an account?{" "}
-                <Link href="/auth/sign-in">
-                  <span className="text-blue-500 hover:underline">Sign in</span>
+                Dont have an account?{" "}
+                <Link href="/sign-up">
+                  <span className="text-blue-500 hover:underline">
+                    Create one
+                  </span>
                 </Link>
               </p>
             </CardFooter>
@@ -142,8 +139,8 @@ const Signup = () => {
           <Separator orientation="vertical" style={{ width: "5px" }} />
           <Card className="w-1/2">
             <CardHeader className="text-center">
-              <CardTitle>Create Account</CardTitle>
-              <CardDescription>Sign up using email</CardDescription>
+              <CardTitle>Welcome Back</CardTitle>
+              <CardDescription>Sign in using email</CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -151,22 +148,6 @@ const Signup = () => {
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-4"
                 >
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Username</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your username"
-                            {...field}
-                            autoComplete="off"
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
                   <FormField
                     control={form.control}
                     name="email"
@@ -192,7 +173,7 @@ const Signup = () => {
                         <FormControl>
                           <Input
                             type="password"
-                            placeholder="Must be more than 8 characters"
+                            placeholder="Secret Code"
                             {...field}
                             autoComplete="off"
                           />
@@ -200,24 +181,8 @@ const Signup = () => {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Confirm your password</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Password Again"
-                            {...field}
-                            autoComplete="off"
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <Button className="w-full bg-gradient-to-r from-pink-500 via-blue-500 to-green-500 hover:opacity-75">
+                  <Separator style={{ height: "5vh", visibility: "hidden" }} />
+                  <Button className=" w-full bg-gradient-to-r from-green-500 via-blue-500 to-pink-500 hover:opacity-75">
                     Submit
                   </Button>
                 </form>
@@ -230,4 +195,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Signin;

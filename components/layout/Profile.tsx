@@ -1,3 +1,4 @@
+'use client';
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -7,19 +8,24 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { PersonIcon } from "@radix-ui/react-icons";
-import { Session } from "next-auth";
 import Image from "next/image";
+import handleAuth from "@/lib/handleAuth";
 
-interface SessionProps {
-  session: Session | null;
+interface ProfileProps {
+  poppins: any
 }
 
-const Profile = ({ session }: SessionProps) => {
+const Profile = (props: ProfileProps) => {
+  const res = handleAuth();
+  const { success, sessionAuth } = res;
   return (
+    <>
+    { !success ? <p className={`${props.poppins.className} text-white hover:text-gray-300 transition duration-300`}>Sign In</p>
+    :
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        {session ? 
-        <Image src={session.user!.image as string} alt="Profile" width={40} height={40} className="rounded-full" />
+        {sessionAuth ? 
+        <Image src={sessionAuth!.image as string} alt="Profile" width={40} height={40} className="rounded-full" />
         :
         <PersonIcon className="w-6 h-6 text-white hover:text-gray-300 transition duration-300" /> }
       </DropdownMenuTrigger>
@@ -29,10 +35,12 @@ const Profile = ({ session }: SessionProps) => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-red-500">
-          <Link href="/auth/sign-out">Sign out</Link>
+          <Link href="/sign-out">Sign out</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+        }
+    </>
   );
 };
 

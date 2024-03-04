@@ -3,7 +3,7 @@
 const CreateEventPage = () => {
     return ( 
         <div>
-               
+            
         </div>
      );
 }

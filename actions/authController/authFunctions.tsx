@@ -28,7 +28,7 @@ export async function addUser(formData: any){
             }
         })
 
-        const token = jwt.sign({userId: newUser.id, email: newUser.email}, process.env.JWT_SECRET as string)
+        const token = jwt.sign({userId: newUser.id, email: newUser.email}, process.env.JWT_SECRET as string, {expiresIn: "1h"})
         return {user: newUser, token: token}
     }
     catch (error) {
