@@ -136,7 +136,7 @@ const Signin = () => {
             </CardFooter>
             <BackButton href="/" label="← Home"/>
           </Card>
-          <Separator orientation="vertical" style={{ width: "5px" }} />
+          <Separator orientation="vertical" className="w-[5px]" />
           <Card className="w-1/2">
             <CardHeader className="text-center">
               <CardTitle>Welcome Back</CardTitle>

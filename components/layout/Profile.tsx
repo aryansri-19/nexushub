@@ -9,7 +9,10 @@ import {
 } from "../ui/dropdown-menu";
 import { PersonIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import HandleAuth from "@/lib/handleAuth";
+import { signOut } from "next-auth/react";
+import useAuth from "@/hooks/useAuth";
 
 interface ProfileProps {
   poppins: any
@@ -17,7 +20,21 @@ interface ProfileProps {
 
 const Profile = (props: ProfileProps) => {
   const res = HandleAuth();
+  const customAuth = useAuth();
+  const router = useRouter();
   const { success, sessionAuth } = res;
+  const handleSignOut = () => {
+    if ( res.sessionAuth ) {
+        signOut({
+            callbackUrl: '/',
+            redirect: true
+        })
+    } else {
+        customAuth.setUser(null);
+        localStorage.removeItem('user');
+        router.push('/');
+    }
+}
   return (
     <>
     { !success ? <p className={`${props.poppins.className} text-white hover:text-gray-300 transition duration-300`}>Sign In</p>
@@ -35,7 +52,7 @@ const Profile = (props: ProfileProps) => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-red-500">
-          <Link href="/sign-out">Sign out</Link>
+          <div onClick={handleSignOut} className="cursor-pointer">Sign out</div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

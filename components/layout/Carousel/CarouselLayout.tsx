@@ -11,7 +11,7 @@ const CarouselLayout = () => {
     return ( 
         <div className="pr-16 pl-16 pt-6 pb-6 bg-gradient-to-r from-gray-900 via-slate-700 to-slate-400">
             <h1 className="text-white font-bold text-lg p-2">Event snapshots</h1>
-            <Carousel className="max-w-screen" opts={{align: "start", loop: true}}>
+            <Carousel className="max-w-screen" opts={{align: "start", loop: true, dragFree: true, containScroll: "trimSnaps"}}>
                 <CarouselContent>
                     {examples.map((example, index) => (
                     <CarouselItem key={index} className="lg:basis-1/5 basis-1/3">
