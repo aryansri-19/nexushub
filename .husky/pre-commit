@@ -1,3 +1,3 @@
-echo "Formatting your code"
+echo "✍️ Formatting your code"
 
 pnpm run lint

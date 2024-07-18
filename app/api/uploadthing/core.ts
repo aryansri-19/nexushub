@@ -8,7 +8,7 @@ const f = createUploadthing();
 const handleAuth = () => {
     const auth = HandleAuth();
     if (!auth.success) throw new UploadThingError("Unauthorized");
-    return { userId: auth?.customAuth?.id || auth.sessionAuth?.name };
+    return { userId: auth?.customAuth?.user?.id|| auth.sessionAuth?.name };
 }
  
 export const ourFileRouter = {

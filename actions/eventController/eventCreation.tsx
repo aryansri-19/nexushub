@@ -1,8 +1,19 @@
 "use server";
 import { prisma } from "@/lib/prisma";
-import { Tag } from "@prisma/client";
 
-export const createEvent = async (formData: any) => {
+type Form = {
+  title: string;
+  description: string;
+  eventDate: Date;
+  userId: number;
+  location: string;
+  startTime: Date;
+  endTime: Date;
+  tags: Tag[];
+  imgUrl: string;
+};
+
+export const createEvent = async (formData: Form) => {
   const {
     title,
     description,
