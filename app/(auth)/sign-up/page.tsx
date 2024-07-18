@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import useAuth from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,19 +30,13 @@ import { signIn } from "next-auth/react";
 import { addUser } from "@/actions/authController/authFunctions";
 import { BackButton } from "@/components/authErrorPage/BackButton";
 import HandleAuth from "@/lib/handleAuth";
+import { SignUpSchema } from "@/lib/forms/schema";
 
-const SignupSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  confirmPassword: z.string().min(8),
-  name: z.string(),
-});
 const poppins = Poppins({ subsets: ["latin"], weight: "300" });
 const Signup = () => {
   const router = useRouter();
-  const auth = useAuth();
-  const form = useForm<z.infer<typeof SignupSchema>>({
-    resolver: zodResolver(SignupSchema),
+  const form = useForm<z.infer<typeof SignUpSchema>>({
+    resolver: zodResolver(SignUpSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -68,21 +61,22 @@ const Signup = () => {
       setAlert({ message: "Password doesn't match", isAlert: true });
       return;
     } else setAlert({ message: "", isAlert: false });
-    const userToStore = await addUser({ name, email, password })
-    if(userToStore.error){
+    const userToStore = await addUser({ name, email, password });
+    if (userToStore.error) {
       setAlert({ message: userToStore.error, isAlert: true });
-    }
-    else{
+    } else {
       localStorage.setItem("user", JSON.stringify(userToStore));
-      auth.setUser(()=>[userToStore.user?.id, userToStore.user?.name, userToStore.user?.email])
+      res.customAuth?.setUser(() => [
+        userToStore.user?.id,
+        userToStore.user?.name,
+        userToStore.user?.email,
+      ]);
       router.push("/");
     }
   }
   const handleLoginProvider = async (provider: "google" | "github") => {
-    await signIn(provider,
-      { callbackUrl: "/" }
-    )
-  }
+    await signIn(provider, { callbackUrl: "/" });
+  };
   return (
     <>
       {alert.isAlert && (
@@ -137,9 +131,9 @@ const Signup = () => {
                 </Link>
               </p>
             </CardFooter>
-            <BackButton href="/" label="← Home"/>
+            <BackButton href="/" label="← Home" />
           </Card>
-          <Separator orientation="vertical" className="w-[5px]"/>
+          <Separator orientation="vertical" className="w-[5px]" />
           <Card className="w-1/2">
             <CardHeader className="text-center">
               <CardTitle>Create Account</CardTitle>

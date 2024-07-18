@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -12,51 +12,62 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import HandleAuth from "@/lib/handleAuth";
 import { signOut } from "next-auth/react";
-import useAuth from "@/hooks/useAuth";
 
 interface ProfileProps {
-  poppins: any
+  poppins: any;
 }
 
 const Profile = (props: ProfileProps) => {
-  const res = HandleAuth();
-  const customAuth = useAuth();
   const router = useRouter();
-  const { success, sessionAuth } = res;
+  const { success, sessionAuth, customAuth } = HandleAuth();
   const handleSignOut = () => {
-    if ( res.sessionAuth ) {
-        signOut({
-            callbackUrl: '/',
-            redirect: true
-        })
+    if (sessionAuth) {
+      signOut({
+        callbackUrl: "/",
+        redirect: true,
+      });
     } else {
-        customAuth.setUser(null);
-        localStorage.removeItem('user');
-        router.push('/');
+      customAuth?.setUser(null);
+      localStorage.removeItem("user");
+      router.push("/");
     }
-}
+  };
   return (
     <>
-    { !success ? <p className={`${props.poppins.className} text-white hover:text-gray-300 transition duration-300`}>Sign In</p>
-    :
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        {sessionAuth ? 
-        <Image src={sessionAuth!.image as string} alt="Profile" width={40} height={40} className="rounded-full" />
-        :
-        <PersonIcon className="w-6 h-6 text-white hover:text-gray-300 transition duration-300" /> }
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem className="focus:bg-gray-300">
-          <Link href="/profile">Your Profile</Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-red-500">
-          <div onClick={handleSignOut} className="cursor-pointer">Sign out</div>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-        }
+      {!success ? (
+        <p
+          className={`${props.poppins.className} text-white hover:text-gray-300 transition duration-300`}
+        >
+          Sign In
+        </p>
+      ) : (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            {sessionAuth ? (
+              <Image
+                src={sessionAuth!.image as string}
+                alt="Profile"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+            ) : (
+              <PersonIcon className="w-6 h-6 text-white hover:text-gray-300 transition duration-300" />
+            )}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem className="focus:bg-gray-300">
+              <Link href="/profile">Your Profile</Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="text-red-500">
+              <div onClick={handleSignOut} className="cursor-pointer">
+                Sign out
+              </div>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </>
   );
 };

@@ -31,56 +31,56 @@ import Link from "next/link";
 import { verifyUser } from "@/actions/authController/authFunctions";
 import { BackButton } from "@/components/authErrorPage/BackButton";
 import HandleAuth from "@/lib/handleAuth";
+import { SignInSchema } from "@/lib/forms/schema";
 
-const SigninSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
 const poppins = Poppins({ subsets: ["latin"], weight: "300" });
 const Signin = () => {
   const router = useRouter();
-  const auth = useAuth();
-  const form = useForm<z.infer<typeof SigninSchema>>({
-    resolver: zodResolver(SigninSchema),
+  const form = useForm<z.infer<typeof SignInSchema>>({
+    resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: "",
       password: "",
     },
     progressive: true,
   });
-  
+
   const res = HandleAuth();
   useEffect(() => {
     if (res.success) {
       router.push("/");
     }
-  }, [res, router])
+  }, [res, router]);
 
   const [alert, setAlert] = useState({ message: "", isAlert: false });
   async function onSubmit() {
     const { email, password } = form.getValues();
-    const user = await verifyUser({ email, password })
+    const user = await verifyUser({ email, password });
     if (user.error) {
       setAlert({ message: user.error, isAlert: true });
     } else {
-      localStorage.setItem("user", JSON.stringify(user))
-      auth.setUser(()=>[user.user?.id, user.user?.name, user.user?.email])
+      localStorage.setItem("user", JSON.stringify(user));
+      res.customAuth?.setUser(() => [
+        user.user?.id,
+        user.user?.name,
+        user.user?.email,
+      ]);
       router.push("/");
-      console.log(user)
+      console.log(user);
     }
   }
   const handleLoginProvider = async (provider: "google" | "github") => {
     try {
       await signIn(provider, {
-        callbackUrl: "/"
+        callbackUrl: "/",
       });
     } catch (error) {
       console.error("Error occurred during login:", error);
     }
-  }
+  };
   return (
     <>
-    {alert.isAlert && (
+      {alert.isAlert && (
         <Alert
           variant="destructive"
           className="fixed bottom-0 bg-white right-0 w-1/5 transition duration-500 ease-in-out transform -translate-x-10 "
@@ -134,7 +134,7 @@ const Signin = () => {
                 </Link>
               </p>
             </CardFooter>
-            <BackButton href="/" label="← Home"/>
+            <BackButton href="/" label="← Home" />
           </Card>
           <Separator orientation="vertical" className="w-[5px]" />
           <Card className="w-1/2">
