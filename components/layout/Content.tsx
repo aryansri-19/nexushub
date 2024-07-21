@@ -1,10 +1,9 @@
 "use client";
 import { Poppins } from "next/font/google";
 import Topic from "../ui/topic";
-import Image from "next/image";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import { tags } from "@/lib/constants/tags";
+import { themes } from "@/lib/constants/themes";
 import { useEffect, useState } from "react";
 import CarouselLayout from "./Carousel/CarouselLayout";
 
@@ -14,7 +13,7 @@ const Content = () => {
   const [randomTags, setRandomTags] = useState<{ title: string; imgUrl: string }[]>([]);
 
   useEffect(() => {
-    const shuffledTags = [...tags];
+    const shuffledTags = [...themes];
     shuffledTags.sort(() => Math.random() - 0.5);
     setRandomTags(shuffledTags.slice(0, 4));
   }, []);

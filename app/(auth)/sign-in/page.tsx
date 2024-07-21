@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
-import useAuth from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {

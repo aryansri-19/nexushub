@@ -1,7 +1,7 @@
-import { addUser, verifyUser } from "@/actions/authController/authFunctions";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import { addUser, verifyUser } from "@/actions/authController/authFunctions";
 
 const handler = NextAuth({
   providers: [
@@ -18,20 +18,35 @@ const handler = NextAuth({
   callbacks: {
     async session({ session }) {
       if (session.user) {
-        const user = await verifyUser({ email: session.user.email! });
-        session.user.image = user.user?.image;
-        session.user.name = user.user?.name;
+        try {
+          const user = await verifyUser({ email: session.user.email! });
+          if (user.user) {
+            session.user.image = user.user?.image;
+            session.user.name = user.user?.name;
+          }
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
       }
       return session;
     },
     async signIn({ user }) {
       if (user) {
-        await addUser({
-          name: user.name!,
-          email: user.email!,
-          image: user.image!,
-        });
-        return true;
+        try {
+          const result = await addUser({
+            name: user.name!,
+            email: user.email!,
+            image: user.image!,
+          });
+          if (result.error) {
+            throw new Error(result.error);
+          }
+          localStorage.setItem("user", JSON.stringify(result));
+          return true;
+        } catch (error) {
+          console.error("Error adding user:", error);
+          return false;
+        }
       }
       return false;
     },

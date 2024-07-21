@@ -1,4 +1,4 @@
-export const tags = [
+export const themes = [
     {
       title: "Music",
       imgUrl: "/images/music.png",

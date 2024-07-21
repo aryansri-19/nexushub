@@ -13,7 +13,7 @@ model User {
     id        Int      @id @default(autoincrement())
     email     String   @unique
     name      String
-    image     String   @default("")
+    image     String?
     password  String
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @default(now()) @map("updated_at")
@@ -23,19 +23,25 @@ model User {
 }
 
 model Event {
-    id          Int        @id @default(autoincrement())
-    title       String
-    description String
-    createdAt   DateTime   @default(now()) @map("created_at")
-    eventDate   DateTime   @map("event_date")
-    organizer   User       @relation("organizer", fields: [userId], references: [id])
-    userId      Int        @map("user_id")
-    location    String
-    startTime   DateTime   @map("start_time")
-    endTime     DateTime   @map("end_time")
-    tags        Tag[]      @relation("tags")
-    attendees   Attendee[]
-    imgUrl      String     @map("img_url")
+    id           Int        @id @default(autoincrement())
+    title        String
+    description  String?
+    createdAt    DateTime   @default(now()) @map("created_at")
+    startDate    DateTime   @map("start_date")
+    startTime    DateTime   @map("start_time")
+    endDate      DateTime?  @map("end_date")
+    endTime      DateTime?  @map("end_time")
+    locationType String     @map("location_type")
+    location     String?
+    onlineLink   String?    @map("online_link")
+    banner       String?    @map("banner_url")
+    isFree       Boolean    @map("is_free")
+    price        Float?
+    capacity     Int?
+    organizer    User       @relation("organizer", fields: [userId], references: [id])
+    userId       Int        @map("user_id")
+    tags         Tag[]      @relation("tags")
+    attendees    Attendee[]
 
     @@map("events")
 }

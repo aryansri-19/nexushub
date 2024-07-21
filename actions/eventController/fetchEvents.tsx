@@ -2,22 +2,28 @@
 
 import { prisma } from "@/lib/prisma";
 
-export const fetchEvents = async (formData: any) => {
-    const {title, userId, eventDate, location, tags} = formData;
+type Form = {
+    title?: string,
+    location?: string,
+    eventDate?: Date,
+    tags?: Tag[],
+    capacity?: number,
+}
+export const fetchEvents = async (formData: Form) => {
+    const {title, eventDate, location, tags, capacity} = formData;
     try {
         const events = await prisma.event.findMany({
             where: {
-                title: title ? title : "",
-                eventDate: eventDate ? new Date(eventDate) : undefined,
-                location: location ? location : "",
+                title,
+                startDate: eventDate,
+                location,
                 tags: {
                     some: {
-                        name: tags.map((tag: any) => tag.name)
-                    }
+                        name: {
+                            in: tags?.map(tag => tag.name),
+                        },
+                    },
                 },
-                organizer: userId ? {
-                    id: userId
-                } : undefined
             }
         });
         return events;
@@ -28,5 +34,4 @@ export const fetchEvents = async (formData: any) => {
     } finally {
         await prisma.$disconnect();
     }
-
 }
